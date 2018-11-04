@@ -5,3 +5,5 @@ RUN mkdir /src
 WORKDIR /src
 
 COPY . .
+RUN pip install oci
+ENTRYPOINT ["python", "database.py"]
