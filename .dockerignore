@@ -1,0 +1,6 @@
+Dockerfile
+.env/
+sql/
+.vscode
+__pycache__/
+.gitignore
