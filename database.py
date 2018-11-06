@@ -3,6 +3,7 @@ import os
 import sys
 import oci
 import argparse
+from operator import itemgetter
 from oci.core import ComputeClient
 from oci.core.models import LaunchInstanceDetails, ImageSourceDetails, CreateImageDetails
 
@@ -35,6 +36,23 @@ class Database(object):
         )
         return resp.data[0]
     
+    def get_all_images(self, name):
+
+        #find latest available image
+        resp = self.client.list_images(self.config['compartment_id'],
+            sort_by="TIMECREATED",
+            sort_order="DESC" 
+        )
+        imgs = []
+        for img in resp.data:
+            i = {}
+            if name in img.display_name:
+                i['display_name'] = img.display_name
+                i['id'] = img.id
+                i['time_created'] = img.time_created
+                imgs.append(i)
+        return sorted(imgs, key=itemgetter('time_created'), reverse=True)
+    
     def _avail_shapes(self, img_id):
 
         resp = self.client.list_shapes(
@@ -51,9 +69,12 @@ class Database(object):
         """
         #find latest image available
         img_id = self._latest_avail_image(img_name).id
+        
         #instance details
         if env is not None and owner is not None:
             dn = "db_" + env + "_" + owner
+        elif env == "qa":
+            dn = "db_QA"
         else:
             dn = "db_instance"
 
