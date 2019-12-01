@@ -6,7 +6,7 @@ cryptography==2.4.2
 idna==2.7
 oci==2.1.2
 pycparser==2.19
-pyOpenSSL==17.5.0
+pyOpenSSL==19.1.0
 python-dateutil==2.7.3
 pytz==2018.7
 six==1.11.0
