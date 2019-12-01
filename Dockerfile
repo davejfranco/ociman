@@ -7,4 +7,7 @@ WORKDIR /src
 
 COPY . .
 RUN pip install oci
-ENTRYPOINT ["python", "ociman.py"]
+RUN pip install -e .
+
+ENTRYPOINT [ "ociman" ]
+
