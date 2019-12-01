@@ -1,5 +1,6 @@
 import sys
-from ociman.cli import args
+from pathlib import Path
+from ociman.cli import args, tag_validator
 from ociman.compute import Instance
 
 
@@ -13,12 +14,26 @@ def main():
     else:
         arg = parser.parse_args(sys.argv[1:])
     
+    #print(arg.action, arg.config, arg.profile, arg.cid)
+    
+    #Intance creation
+    cli = Instance(arg.config, arg.profile, arg.cid)
+    
+    #manage instance
+    if arg.action and arg.tag:
+        if not tag_validator(arg.tag):
+            sys.exit(0)
+        keyvalue = arg.tag.split(":")
+        instances = cli.list_vms_by_tag(keyvalue[0],keyvalue[1])
+        cli.manage_instance(arg.action.upper(), instances)
+
+
 
 
     # #Create Instance
-    if arg.create_instance and arg.image_name is not None:
-        db.create_instance(arg.image_name, arg.env, arg.own)
-        sys.exit(0)
+    # if arg.create_instance and arg.image_name is not None:
+    #     db.create_instance(arg.image_name, arg.env, arg.own)
+    #     sys.exit(0)
 
 
 if __name__ == "__main__":
