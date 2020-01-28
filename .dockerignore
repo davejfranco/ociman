@@ -1,5 +1,5 @@
 Dockerfile
-.env/
+env/
 sql/
 .vscode
 __pycache__/
