@@ -14,10 +14,8 @@ def main():
     else:
         arg = parser.parse_args(sys.argv[1:])
     
-    #print(arg.action, arg.config, arg.profile, arg.cid)
-    
     #Intance creation
-    cli = Instance(arg.cid, arg.config, arg.profile)
+    cli = Instance(arg.config, arg.profile, arg.cid)
     
     #manage instance
     if arg.action and arg.tag:
@@ -26,17 +24,22 @@ def main():
         keyvalue = arg.tag.split(":")
         #instances = cli.list_vms_by_tag(keyvalue[0],keyvalue[1])
         cli.manage_instance(arg.action.upper(), keyvalue[0],keyvalue[1])
+        sys.exit(0)
     
+    #list Instances with given freeform tag
     if arg.list and arg.tag:
         if not tag_validator(arg.tag):
             print("Not a valid tag")
             sys.exit(0)
-
-
-
+        
+        keyvalue = arg.tag.split(":")
+        cli.instances_pretty_print(keyvalue[0],keyvalue[1])
 
 
 if __name__ == "__main__":
+    """
+    Main entrypoint
+    """
     main()
    
     

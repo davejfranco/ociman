@@ -4,6 +4,7 @@ import oci
 from pathlib import Path
 from operator import itemgetter
 from ociman.clients import Clients
+from prettytable import PrettyTable
 from oci.core.models import LaunchInstanceDetails, ImageSourceDetails, CreateImageDetails
 
 
@@ -40,23 +41,29 @@ class Instance:
         return ids
 
     
-    # def instances_pretty_print(self, tag_key, tag_value):
-    #     """
-    #     Print list of instances ids
-    #     """
-    #     instance_ids = self._list_vms_by_tag(tag_key, tag_value)
-    #     if len(instance_ids) == 0:
-    #         print("Not instance found with key:{k} and value: {v} \n".format(k=tag_key, v=tag_value))
-    #         sys.exit(0)
-    #     titles = ["Display Name", "State", "OCID"]
+    def instances_pretty_print(self, tag_key, tag_value):
+        """
+        Print list of instances ids
+        """
+        instances = self._list_vms_by_tag(tag_key, tag_value)
+        if len(instances) == 0:
+            print("Not instance found with key:{k} and value: {v} \n".format(k=tag_key, v=tag_value))
+            sys.exit(0)
+        #Formatting output
+        pt = PrettyTable()
+        pt.field_names = ["Server Name", "State", "OCID"]
+        for vm in instances:
+            pt.add_row([vm.display_name, vm.lifecycle_state, vm.id])
+        
+        print(pt)
 
 
     def manage_instance(self, Operation, tag_key, tag_value):
         
         valid_ops = ["STOP", "START", "SOFTRESET", "RESET", "SOFTSTOP"]
         if Operation in valid_ops:            
-            instances_ids = self._list_vms_by_tag(tag_key, tag_value) #self._list_vms_by_tag(tag_key, tag_value)
-            for vmid in instance_ids:
+            instances_ids = self._list_vm_ids(tag_key, tag_value) #self._list_vms_by_tag(tag_key, tag_value)
+            for vmid in instances_ids:
                 self.ccli.instance_action(vmid, Operation)
         else:
             print(f"Not a valid action {Operation}")
