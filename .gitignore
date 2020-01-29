@@ -1,7 +1,7 @@
 config
 oci_api_key.pem
 .vscode/
-env/
+.env/
 __pycache__/
 sql/db-data/*
 build/
