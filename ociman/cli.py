@@ -16,6 +16,8 @@ def args(args=None):
                         help='compartment id')
     parser.add_argument('-a', '--action',
                         help='action to be taken on instances: start, stop, delete, sofstop, reset, sofreset')
+    parser.add_argument('-l', '--list', action="store_true", default=True,
+                        help='list vm resources based on tag, --tag is required')
     parser.add_argument('-r', '--dry-run',
                         help='owner of the resource to be created',
                         action='store_false',

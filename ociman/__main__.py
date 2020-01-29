@@ -17,15 +17,15 @@ def main():
     #print(arg.action, arg.config, arg.profile, arg.cid)
     
     #Intance creation
-    cli = Instance(arg.config, arg.profile, arg.cid)
+    cli = Instance(arg.cid, arg.config, arg.profile)
     
     #manage instance
     if arg.action and arg.tag:
         if not tag_validator(arg.tag):
             sys.exit(0)
         keyvalue = arg.tag.split(":")
-        instances = cli.list_vms_by_tag(keyvalue[0],keyvalue[1])
-        cli.manage_instance(arg.action.upper(), instances)
+        #instances = cli.list_vms_by_tag(keyvalue[0],keyvalue[1])
+        cli.manage_instance(arg.action.upper(), keyvalue[0],keyvalue[1])
     
     if arg.list and arg.tag:
         if not tag_validator(arg.tag):
