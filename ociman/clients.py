@@ -7,13 +7,16 @@ from oci.core import ComputeClient
 
 class OciConfig:
 
-    def __init__(self, config_path=str(Path.home())+'/.oci/config', profile='DEFAULT'):
+    def __init__(self, config_path, profile):
         self.config_path = config_path
         self.profile = profile
 
         if os.path.isfile(self.config_path):
             try:
-                self.config = oci.config.from_file(self.config_path, self.profile)
+                if oci.config.validate_config(self.config_path):
+                    self.config = oci.config.from_file(self.config_path, self.profile)
+                else:
+                    raise oci.exceptions.InvalidConfig
             except oci.exceptions.ConfigFileNotFound as err:
                 print(err, file=sys.stderr)
                 sys.exit(1)
