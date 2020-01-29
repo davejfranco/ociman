@@ -14,10 +14,6 @@ class OciConfig:
         if os.path.isfile(self.config_path):
             try:
                 self.config = oci.config.from_file(self.config_path, self.profile)
-                # if oci.config.validate_config(self.config_path):
-                #     self.config = oci.config.from_file(self.config_path, self.profile)
-                # else:
-                #     raise oci.exceptions.InvalidConfig
             except oci.exceptions.ConfigFileNotFound as err:
                 print(err, file=sys.stderr)
                 sys.exit(1)
