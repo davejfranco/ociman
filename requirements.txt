@@ -1,7 +1,7 @@
 certifi==2019.11.28
 cffi==1.13.2
 configparser==4.0.2
-cryptography==2.8
+cryptography==3.2
 oci==2.10.2
 prettytable==0.7.2
 pycparser==2.19
